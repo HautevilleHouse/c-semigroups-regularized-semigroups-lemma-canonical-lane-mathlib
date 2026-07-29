@@ -1,0 +1,33 @@
+import HautevilleHouse.CSemigroupsRegularizedSemigroupsLemmaCanonicalLaneLean.RegularizedSemigroupsPackage
+import HautevilleHouse.CSemigroupsRegularizedSemigroupsLemmaCanonicalLaneLean.RegularizationOperator
+import HautevilleHouse.CSemigroupsRegularizedSemigroupsLemmaCanonicalLaneLean.PerturbationStability
+import HautevilleHouse.CSemigroupsRegularizedSemigroupsLemmaCanonicalLaneLean.SpectralMapping
+
+namespace HautevilleHouse
+namespace CSemigroupsRegularizedSemigroupsLemmaCanonicalLaneLean
+
+structure AnalyticFoundation where
+  regularizedSemigroups : RegularizedSemigroupsPackage
+  regularizedSemigroupsEvidence : RegularizedSemigroupsEvidence regularizedSemigroups
+  regularizationOperator : RegularizationOperatorPackage regularizedSemigroups
+  regularizationOperatorEvidence : RegularizationOperatorEvidence regularizationOperator
+  perturbationStability : PerturbationStabilityPackage regularizedSemigroups
+  perturbationStabilityEvidence : PerturbationStabilityEvidence perturbationStability
+  spectralMapping : SpectralMappingPackage regularizedSemigroups
+  spectralMappingEvidence : SpectralMappingEvidence spectralMapping
+
+def AnalyticFoundationClosed (A : AnalyticFoundation) : Prop :=
+  RegularizedSemigroupsClosed A.regularizedSemigroups ∧
+  RegularizationOperatorClosed A.regularizationOperator ∧
+  PerturbationStabilityClosed A.perturbationStability ∧
+  SpectralMappingClosed A.spectralMapping
+
+theorem analytic_foundation_closed_from_evidence (A : AnalyticFoundation) :
+    AnalyticFoundationClosed A := by
+  exact And.intro (regularized_semigroups_closed_from_evidence A.regularizedSemigroups A.regularizedSemigroupsEvidence)
+    (And.intro (regularization_operator_closed_from_evidence A.regularizationOperator A.regularizationOperatorEvidence)
+      (And.intro (perturbation_stability_closed_from_evidence A.perturbationStability A.perturbationStabilityEvidence)
+        (spectral_mapping_closed_from_evidence A.spectralMapping A.spectralMappingEvidence)))
+
+end CSemigroupsRegularizedSemigroupsLemmaCanonicalLaneLean
+end HautevilleHouse
